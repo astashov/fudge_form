@@ -30,24 +30,24 @@ Which will give you:
 
 <pre>
 <code>
-&lt;form action="/users/" method="post"&gt;
-	&lt;fieldset&gt;
-		&lt;legend&gt;Your Details&lt;/legend&gt;
-		&lt;ol&gt;
-			&lt;li class="required"&gt;
-				&lt;label for="user_name"&gt;Your Name &lt;em&gt;*&lt;/em&gt;&lt;/label&gt;
-				&lt;input type="text" name="user[name]" id="user_name" class="required" /&gt;
-			&lt;/li&gt;
-			&lt;li class="required"&gt;
-				&lt;label for="user_password"&gt;Password &lt;em&gt;*&lt;/em&gt;&lt;/label&gt;
-				&lt;input type="password" name="user[password]" id="user_password" class="required" /&gt;
-			&lt;/li&gt;
-		&lt;/ol&gt;
-	&lt;/fieldset&gt;
-	&lt;div class="buttons"&gt;
-		&lt;input type="submit" value="Submit" /&gt;
-	&lt;/div&gt;
-&lt;/form&gt;
+<form action="/users/" method="post">
+	<fieldset>
+		<legend>Your Details</legend>
+		<ol>
+			<li class="required">
+				<label for="user_name">Your Name <em>*</em></label>
+				<input type="text" name="user[name]" id="user_name" class="required" />
+			</li>
+			<li class="required">
+				<label for="user_password">Password <em>*</em></label>
+				<input type="password" name="user[password]" id="user_password" class="required" />
+			</li>
+		</ol>
+	</fieldset>
+	<div class="buttons">
+		<input type="submit" value="Submit" />
+	</div>
+</form>
 </code>
 </pre>
 
