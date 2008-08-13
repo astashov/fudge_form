@@ -1,0 +1,60 @@
+h1. Fudge Form
+
+Fudge Form is a way of building easier, semantically correct forms using a custom form builder.
+Building forms in rails is boring and repetitive. This plugin helps to remove the boredom and 
+fills you full of form building mega powers.
+
+Fudge Form is based on Semantic Form Builder[1] by Ruby Pond[2]. The main difference is that 
+Fudge Form generates forms to fit with the method of building forms described on A List Apart[3]
+using fieldsets and ols to wrap your content.
+
+This plugin is currently experimental and does not have any tests. Use at your own peril.
+
+h2. Example
+
+Fudge Form currently only works with form_for. An example is show below:
+
+<pre>
+<code>
+<% form_for @user do |f| %>
+	<% f.field_set "Your Details" do %>
+		<%= f.text_field :name, :label => 'Your Name', :required => true %>
+		<%= f.password_field :password, :required => true %>
+	<% end %>
+	<%= f.submit 'Submit' %>
+<% end %>
+</code>
+</pre>
+
+Which will give you:
+
+<pre>
+<code>
+&lt;form action="/users/" method="post"&gt;
+	&lt;fieldset&gt;
+		&lt;legend&gt;Your Details&lt;/legend&gt;
+		&lt;ol&gt;
+			&lt;li class="required"&gt;
+				&lt;label for="user_name"&gt;Your Name &lt;em&gt;*&lt;/em&gt;&lt;/label&gt;
+				&lt;input type="text" name="user[name]" id="user_name" class="required" /&gt;
+			&lt;/li&gt;
+			&lt;li class="required"&gt;
+				&lt;label for="user_password"&gt;Password &lt;em&gt;*&lt;/em&gt;&lt;/label&gt;
+				&lt;input type="password" name="user[password]" id="user_password" class="required" /&gt;
+			&lt;/li&gt;
+		&lt;/ol&gt;
+	&lt;/fieldset&gt;
+	&lt;div class="buttons"&gt;
+		&lt;input type="submit" value="Submit" /&gt;
+	&lt;/div&gt;
+&lt;/form&gt;
+</code>
+</pre>
+
+I'll post a more complete example once I get time. Have a look in the code until then, yo!
+
+f1. "http://github.com/rubypond/semantic_form_builder/tree/master":http://github.com/rubypond/semantic_form_builder/tree/master
+f2. "http://rubypond.com/":http://rubypond.com/
+f3. "http://www.alistapart.com/articles/prettyaccessibleforms/":http://www.alistapart.com/articles/prettyaccessibleforms/
+
+Copyright (c) 2008 Jim Neath / Fudge Studios Ltd, released under the MIT license
