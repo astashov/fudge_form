@@ -4,8 +4,8 @@ Fudge Form is a way of building easier, semantically correct forms using a custo
 Building forms in rails is boring and repetitive. This plugin helps to remove the boredom and 
 fills you full of form building mega powers.
 
-Fudge Form is based on Semantic Form Builder[1] by Ruby Pond[2]. The main difference is that 
-Fudge Form generates forms to fit with the method of building forms described on A List Apart[3]
+Fudge Form is based on "Semantic Form Builder":http://github.com/rubypond/semantic_form_builder/tree/master by "Ruby Pond":http://rubypond.com/. The main difference is that 
+Fudge Form generates forms to fit with the method of building forms described on "A List Apart":http://www.alistapart.com/articles/prettyaccessibleforms/
 using fieldsets and ols to wrap your content.
 
 This plugin is currently experimental and does not have any tests. Use at your own peril.
@@ -51,10 +51,6 @@ Which will give you:
 </code>
 </pre>
 
-I'll post a more complete example once I get time. Have a look in the code until then, yo!
-
-fn1. "http://github.com/rubypond/semantic_form_builder/tree/master":http://github.com/rubypond/semantic_form_builder/tree/master
-fn2. "http://rubypond.com/":http://rubypond.com/
-fn3. "http://www.alistapart.com/articles/prettyaccessibleforms/":http://www.alistapart.com/articles/prettyaccessibleforms/
+I'll post a more complete example once I get time. Have a look in the code until then, yo!s
 
 Copyright (c) 2008 Jim Neath / Fudge Studios Ltd, released under the MIT license
