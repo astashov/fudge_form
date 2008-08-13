@@ -53,8 +53,8 @@ Which will give you:
 
 I'll post a more complete example once I get time. Have a look in the code until then, yo!
 
-f1. "http://github.com/rubypond/semantic_form_builder/tree/master":http://github.com/rubypond/semantic_form_builder/tree/master
-f2. "http://rubypond.com/":http://rubypond.com/
-f3. "http://www.alistapart.com/articles/prettyaccessibleforms/":http://www.alistapart.com/articles/prettyaccessibleforms/
+fn1. "http://github.com/rubypond/semantic_form_builder/tree/master":http://github.com/rubypond/semantic_form_builder/tree/master
+fn2. "http://rubypond.com/":http://rubypond.com/
+fn3. "http://www.alistapart.com/articles/prettyaccessibleforms/":http://www.alistapart.com/articles/prettyaccessibleforms/
 
 Copyright (c) 2008 Jim Neath / Fudge Studios Ltd, released under the MIT license
