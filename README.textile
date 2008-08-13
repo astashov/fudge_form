@@ -10,43 +10,4 @@ using fieldsets and ols to wrap your content.
 
 This plugin is currently experimental and does not have any tests. Use at your own peril.
 
-h2. Example
-
-Fudge Form currently only works with form_for. An example is show below:
-
-<code>
-<% form_for @user do |f| %>
-	<% f.field_set "Your Details" do %>
-		<%= f.text_field :name, :label => 'Your Name', :required => true %>
-		<%= f.password_field :password, :required => true %>
-	<% end %>
-	<%= f.submit 'Submit' %>
-<% end %>
-</code>
-
-Which will give you:
-
-<code>
-<form action="/users/" method="post">
-	<fieldset>
-		<legend>Your Details</legend>
-		<ol>
-			<li class="required">
-				<label for="user_name">Your Name <em>*</em></label>
-				<input type="text" name="user[name]" id="user_name" class="required" />
-			</li>
-			<li class="required">
-				<label for="user_password">Password <em>*</em></label>
-				<input type="password" name="user[password]" id="user_password" class="required" />
-			</li>
-		</ol>
-	</fieldset>
-	<div class="buttons">
-		<input type="submit" value="Submit" />
-	</div>
-</form>
-</code>
-
-I'll post a more complete example once I get time. Have a look in the code until then, yo!s
-
 Copyright (c) 2008 Jim Neath / Fudge Studios Ltd, released under the MIT license
