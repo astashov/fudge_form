@@ -14,6 +14,7 @@ h2. Example
 
 Fudge Form currently only works with form_for. An example is show below:
 
+<code>
 &lt;% form_for @user do |f| %&gt;
 	&lt;% f.field_set "Your Details" do %&gt;
 		&lt;%= f.text_field :name, :label =&gt; 'Your Name', :required =&gt; true %&gt;
@@ -21,9 +22,11 @@ Fudge Form currently only works with form_for. An example is show below:
 	&lt;% end %&gt;
 	&lt;%= f.submit 'Submit' %&gt;
 &lt;% end %&gt;
+</code>
 
 Which will give you:
 
+<code>
 &lt;form action="/users/" method="post"&gt;
 	&lt;fieldset&gt;
 		&lt;legend&gt;Your Details&lt;/legend&gt;
@@ -42,6 +45,7 @@ Which will give you:
 		&lt;input type="submit" value="Submit" /&gt;
 	&lt;/div&gt;
 &lt;/form&gt;
+</code>
 
 I'll post a more complete example once I get time. Have a look in the code until then, yo!s
 
