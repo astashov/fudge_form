@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors  = ["Jim Neath"]
   s.files    = ["fudge-form.gemspec",
     "install.rb",
-    "MIT_LICENSE",
+    "MIT-LICENSE",
     "Rakefile",
     "README.textile",
     "initializers/fudge_form.rb",
