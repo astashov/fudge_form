@@ -2,7 +2,8 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
   include FudgeFormHelper
   
   def field_settings(method, options = {}, tag_value = nil)
-    field_name = "#{@object_name}_#{method.to_s}"
+    sanitized_object_name = @object_name.to_s.gsub(/[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
+    field_name = "#{sanitized_object_name}_#{method.to_s}"
     default_label = tag_value.nil? ? "#{method.to_s.humanize.titleize}" : "#{tag_value.to_s.humanize.titleize}"
     label = options[:label] ? options.delete(:label) : default_label
     options[:class] ||= ""
