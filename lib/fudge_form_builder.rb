@@ -109,14 +109,14 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
       
   def submit(method, options = {})
     add_class_name(options, 'submit')
-    %Q{<div class="buttons">#{super}</div>}
+    %Q{<li class="buttons">#{super}</li>}
   end
   
   def submit_and_back(submit_name, options = {})
     add_class_name(options, 'submit')
     submit_button = @template.submit_tag(submit_name, options)
     back_link = @template.link_to('Back', :back, :class => 'back')
-    %Q{<div class="buttons">#{submit_button} #{back_link}</div>}
+    %Q{<li class="buttons">#{submit_button} #{back_link}</li>}
   end
   
   protected
