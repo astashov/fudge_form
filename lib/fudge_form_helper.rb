@@ -33,11 +33,11 @@ module FudgeFormHelper
   
   def field_set(legend = nil, &block)
     content = @template.capture(&block)
-    @template.concat(@template.tag(:fieldset, {}, true), block.binding)
-    @template.concat(@template.content_tag(:legend, legend), block.binding) unless legend.blank?
-    @template.concat(@template.tag(:ol, {}, true), block.binding)
-    @template.concat(content, block.binding)
-    @template.concat("</ol></fieldset>", block.binding)
+    @template.concat(@template.tag(:fieldset, {}, true))
+    @template.concat(@template.content_tag(:legend, legend)) unless legend.blank?
+    @template.concat(@template.tag(:ol, {}, true))
+    @template.concat(content)
+    @template.concat("</ol></fieldset>")
   end
  
 end
