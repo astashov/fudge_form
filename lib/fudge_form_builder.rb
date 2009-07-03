@@ -2,7 +2,6 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
   include FudgeFormHelper
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::FormTagHelper
-  include ActionView::Helpers::FormOptionsHelper
   
   def field_settings(method, options = {}, tag_value = nil)
     sanitized_object_name = @object_name.to_s.gsub(/[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
@@ -11,6 +10,10 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
     label = options[:label] ? options.delete(:label) : default_label
     options[:class] ||= ""
     options[:class] += options[:required] ? "m-form_required" : ""
+    # Customize id for uniqueness of many forms on one page
+    # (by default, if you have many forms of the same model on one page, form elements of these
+    # forms will have the same id, and page will be not valid (by XHTML specification).
+    # This is fix for it.
     options[:id] = "#{field_name}_#{@object.id}" if @object && !@object.new_record?
     label += '<em>*</em>' if options[:required]
     options.delete(:required)
@@ -43,18 +46,23 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
   end
  
   def date_select(method, options = {}, html_options = {})
-    #options[:order] = [:day, :month, :year]
     add_class_name(options, 'm-form_select')
     field_name, label, options = field_settings(method, options)
-    elements = day_select(method, options, html_options) + month_select(method, options, html_options) + year_select(method, options, html_options)
-    wrapping("date", field_name, label, elements, options)#super, options)
+    elements = ""
+    elements += day_select(method, options, html_options)
+    elements += month_select(method, options, html_options)
+    elements += year_select(method, options, html_options)
+    wrapping("date", field_name, label, elements, options)
   end
 
   def year_select(method, options = {}, html_options = {})
     start_year = options.delete(:start_year) || 1970
     end_year = options.delete(:end_year) || 2030
     default = Date.today.year
-    select_options = options_for_select(start_year..end_year, @object.send(method).year || default)
+    selected_value = @object.send(method).year || default 
+    # Building array of options takes pretty much time,
+    # so this function cache it.
+    select_options = year_select_options(start_year, end_year, selected_value)
     field_name, label, options = field_settings(method, options)
     options[:id] += '_1i'
     sanitized_object_name = @object_name.to_s.gsub(/[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
@@ -63,10 +71,10 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
 
   def month_select(method, options = {}, html_options = {})
     default = 1
-    select_options = options_for_select(
-      [["January", 1], ["February", 2], ["March", 3], ["April", 4], ["May", 5], ["June", 6], ["July", 7], ["August", 8], ["September", 9], ["October", 10], ["November", 11], ["December", 12]],
-      @object.send(method).month || default
-    )
+    selected_value = @object.send(method).month || default
+    # Building array of options takes pretty much time,
+    # so this function cache it.
+    select_options = month_select_options(selected_value)
     field_name, label, options = field_settings(method, options)
     options[:id] += '_2i'
     sanitized_object_name = @object_name.to_s.gsub(/[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
@@ -75,7 +83,10 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
 
   def day_select(method, options = {}, html_options = {})
     default = 1
-    select_options = options_for_select(0..31, @object.send(method).day || default)
+    selected_value = @object.send(method).day || default
+    # Building array of options takes pretty much time,
+    # so this function cache it.
+    select_options = day_select_options(selected_value)
     field_name, label, options = field_settings(method, options)
     options[:id] += '_3i'
     sanitized_object_name = @object_name.to_s.gsub(/[^-a-zA-Z0-9:.]/, "_").sub(/_$/, "")
@@ -150,7 +161,57 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
     field_name, label, options = field_settings(method, options)
     semantic_group("check-box", field_name, label, selections, options)
   end
-      
+
+  # Build array of years - options for select tag, then cache it. 
+  def year_select_options(start_year, end_year, selected_value)
+    if !@year_select_options || !@year_select_options["#{start_year}_#{end_year}"]
+      @year_select_options ||= {}
+      @year_select_options["#{start_year}_#{end_year}"] = (start_year..end_year).map do |y| 
+        "<option value='#{y}'>#{y}</option>"
+      end.join("") 
+    end
+    set_selected_option(@year_select_options["#{start_year}_#{end_year}"], selected_value)
+  end
+
+  # Build array of months - options for select tag, then cache it. 
+  def month_select_options(selected_value)
+    unless @month_select_options
+      months = {
+        "January" => 1,
+        "February" => 2, 
+        "March" => 3, 
+        "April" => 4,
+        "May" => 5,
+        "June" => 6, 
+        "July" => 7, 
+        "August" => 8, 
+        "September" => 9,
+        "October" => 10, 
+        "November" => 11, 
+        "December" => 12,
+      }
+      @month_select_options = months.map do |key, value| 
+        "<option value='#{value}'>#{key}</option>"
+      end.join("") 
+    end
+    set_selected_option(@month_select_options, selected_value)
+  end
+
+  # Build array of days - options for select tag, then cache it. 
+  def day_select_options(selected_value)
+    unless @day_select_options
+      @day_select_options = (1..31).map do |d| 
+          "<option value='#{d}'>#{d}</option>"
+      end.join("") 
+    end
+    set_selected_option(@day_select_options, selected_value)
+  end
+
+  # Stupid, but fast way to add selected value to options :)
+  def set_selected_option(options, selected_value)
+    options.gsub(/ value='#{selected_value}'/, " value='#{selected_value}' selected='selected'")
+  end
+
   def submit(method, options = {})
     add_class_name(options, 'm-form_submit')
     %Q{<li class="buttons">#{super}</li>}
