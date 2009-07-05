@@ -23,6 +23,7 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
       options[:id] = "#{field_name}_f#{@@id_counter}"
       @@id_counter += 1
     end
+    options[:method] = method
     label += '<em>*</em>' if options[:required]
     options.delete(:required)
     [field_name, label, options]
