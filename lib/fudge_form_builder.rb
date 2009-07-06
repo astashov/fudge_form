@@ -23,7 +23,6 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
       options[:id] = "#{field_name}_f#{@@id_counter}"
       @@id_counter += 1
     end
-    options[:method] = method
     label += '<em>*</em>' if options[:required]
     options.delete(:required)
     [field_name, label, options]
@@ -36,7 +35,7 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
   def text_field(method, options = {})
     add_class_name(options, 'm-form_text')
     field_name, label, options = field_settings(method, options)
-    wrapping("text", field_name, label, super, options)
+    wrapping("text", field_name, label, super, method, options)
   end
 
   def hidden_field(method, options = {})
@@ -48,46 +47,47 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
   def file_field(method, options = {})
     add_class_name(options, 'm-form_file')
     field_name, label, options = field_settings(method, options)
-    wrapping("file", field_name, label, super, options)
+    wrapping("file", field_name, label, super, method, options)
   end
   
   def datetime_select(method, options = {}, html_options = {})
     options[:order] = [:day, :month, :year]
     add_class_name(html_options, 'm-form_select')
     field_name, label, options = field_settings(method, options)
-    wrapping("datetime", field_name, label, super, options)
+    wrapping("datetime", field_name, label, super, method, options)
   end
 
   def time_select(method, options = {}, html_options = {})
     add_class_name(options, 'm-form_select')
     field_name, label, options = field_settings(method, options)
     elements = ""
-    elements += hour_select(method, options, html_options)
-    elements += minute_select(method, options, html_options)
-    wrapping("time", field_name, label, elements, options)
+    elements += hour_select(method, options.dup, html_options)
+    elements += minute_select(method, options.dup, html_options)
+    wrapping("time", field_name, label, elements, method, options)
   end
  
   def sign_select(method, options = {}, html_options = {})
     add_class_name(html_options, 'm-form_select')
     field_name, label, options = field_settings(method, options)
     element = select_tag("#{sanitized_object_name}[#{method.to_s}]", signs_select_options(@object[method]), options)
-    wrapping("select", field_name, label, element, options)
+    wrapping("select", field_name, label, element, method, options)
   end
 
   def date_select(method, options = {}, html_options = {})
     add_class_name(options, 'm-form_select')
     field_name, label, options = field_settings(method, options)
     elements = ""
-    elements += day_select(method, options, html_options)
-    elements += month_select(method, options, html_options)
-    elements += year_select(method, options, html_options)
-    wrapping("date", field_name, label, elements, options)
+    elements += day_select(method, options.dup, html_options)
+    elements += month_select(method, options.dup, html_options)
+    elements += year_select(method, options.dup, html_options)
+    wrapping("date", field_name, label, elements, method, options)
   end
 
   def hour_select(method, options = {}, html_options = {})
     default = Time.now.hour
     selected_value = (@object.send(method) && @object.send(method).hour) || default 
     select_options = hour_select_options(selected_value)
+    add_class_name(options, 'hour')
     field_name, label, options = field_settings(method, options)
     options[:id] += '_4i'
     select_tag("#{sanitized_object_name}[#{method.to_s}(4i)]", select_options, options)
@@ -97,6 +97,7 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
     default = Time.now.min
     selected_value = (@object.send(method) && @object.send(method).min) || default 
     select_options = minute_select_options(selected_value)
+    add_class_name(options, 'minute')
     field_name, label, options = field_settings(method, options)
     options[:id] += '_5i'
     select_tag("#{sanitized_object_name}[#{method.to_s}(5i)]", select_options, options)
@@ -111,6 +112,7 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
     # Building array of options takes pretty much time,
     # so this function cache it.
     select_options = year_select_options(start_year, end_year, selected_value)
+    add_class_name(options, 'year')
     field_name, label, options = field_settings(method, options)
     options[:id] += '_1i'
     select_tag("#{sanitized_object_name}[#{method.to_s}(1i)]", select_options, options)
@@ -122,6 +124,7 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
     # Building array of options takes pretty much time,
     # so this function cache it.
     select_options = month_select_options(selected_value)
+    add_class_name(options, 'month')
     field_name, label, options = field_settings(method, options)
     options[:id] += '_2i'
     select_tag("#{sanitized_object_name}[#{method.to_s}(2i)]", select_options, options)
@@ -133,6 +136,7 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
     # Building array of options takes pretty much time,
     # so this function cache it.
     select_options = day_select_options(selected_value)
+    add_class_name(options, 'day')
     field_name, label, options = field_settings(method, options)
     options[:id] += '_3i'
     select_tag("#{sanitized_object_name}[#{method.to_s}(3i)]", select_options, options)
@@ -142,13 +146,13 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
   def radio_button(method, tag_value, options = {})
     add_class_name(options, 'm-form_radio')
     field_name, label, options = field_settings(method, options)
-    wrapping("radio", field_name, label, super, options)
+    wrapping("radio", field_name, label, super, method, options)
   end
     
   def check_box(method, options = {}, checked_value = "1", unchecked_value = "0")
     add_class_name(options, 'm-form_checkbox')
     field_name, label, options = field_settings(method, options)
-    wrapping("check-box", field_name, label, super, options)
+    wrapping("check-box", field_name, label, super, method, options)
   end
 
   def gender_select(method, options = {}, html_options = {})
@@ -159,20 +163,20 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
     add_class_name(html_options, 'm-form_select')
     field_name, label, options = field_settings(method, options)
     html_options[:id] = options[:id]
-    wrapping("select", field_name, label, super, options)
+    wrapping("select", field_name, label, super, method, options)
   end
   
   def password_field(method, options = {})
     add_class_name(options, 'm-form_password')
     field_name, label, options = field_settings(method, options)
-    wrapping("password", field_name, label, super, options)
+    wrapping("password", field_name, label, super, method, options)
   end
  
   def text_area(method, options = {})
     options[:rows] = 5
     add_class_name(options, 'm-form_textarea')
     field_name, label, options = field_settings(method, options)
-    wrapping("textarea", field_name, label, super, options)
+    wrapping("textarea", field_name, label, super, method, options)
   end
   
   def radio_button_group(method, values, options = {})

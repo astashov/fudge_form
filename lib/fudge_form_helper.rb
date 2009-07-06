@@ -1,9 +1,9 @@
 module FudgeFormHelper
       
-  def wrapping(type, field_name, label, field, options = {})
+  def wrapping(type, field_name, label, field, method, options = {})
     help = %Q{<small>#{options[:help]}</small>} if options[:help]
     to_return = []
-    to_return << %Q{<li class="m-form_element #{options[:method]}">}
+    to_return << %Q{<li class="m-form_element #{method}">}
     to_return << options[:before_html] if options[:before_html]
     to_return << %Q{<label for="#{options[:id] || field_name}" class="m-form_label">#{label}</label>} unless ["radio","check", "submit"].include?(type)
     to_return << field
