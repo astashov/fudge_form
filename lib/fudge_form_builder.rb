@@ -178,7 +178,34 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
     field_name, label, options = field_settings(method, options)
     wrapping("textarea", field_name, label, super, method, options)
   end
+
+  def body_text_area(method, options = {})
+    options[:rows] = 5
+    add_class_name(options, 'm-form_textarea')
+    field_name, label, options = field_settings(method, options)
+    textarea = "<div class='m-form_field'>"
+    textarea += text_area_tag("#{sanitized_object_name}[#{method.to_s}]", @object[method], options)
+    textarea += "<p class='m-char-counter_text'>#{body_length_text(@object)}</p>"
+    textarea += "</div>"
+    wrapping("textarea", field_name, label, textarea, method, options)
+  end
   
+  def body_length_text(item)
+    content_type = item.content_type
+    min = content_type.min_characters_count
+    max = content_type.max_characters_count
+    length = item.body.to_s.mb_chars.length.to_s
+    if !min.blank? && !max.blank?
+      "<em class='length'>#{length}</em> characters (<em class='min'>#{min}</em> - <em class='max'>#{max}</em> allowed)"
+    elsif !min.blank?
+      "<em class='length'>#{length}</em> characters (<em class='min'>#{min}</em> minimum)"
+    elsif !max.blank?
+      "<em class='length'>#{length}</em> characters (<em class='max'>#{max}</em> maximum)"
+    else
+      "<em class='length'>#{length}</em> characters"
+    end
+  end
+
   def radio_button_group(method, values, options = {})
     add_class_name(options, 'm-form_radio')
     selections = []
