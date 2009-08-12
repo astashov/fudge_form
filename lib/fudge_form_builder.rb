@@ -185,7 +185,7 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
     field_name, label, options = field_settings(method, options)
     textarea = "<div class='m-form_field'>"
     textarea += text_area_tag("#{sanitized_object_name}[#{method.to_s}]", @object[method], options)
-    textarea += "<p class='m-char-counter_text'>#{body_length_text(@object)}</p>"
+    textarea += "<p class='b-char-counter_text'>#{body_length_text(@object)}</p>"
     textarea += "</div>"
     wrapping("textarea", field_name, label, textarea, method, options)
   end
