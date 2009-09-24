@@ -300,22 +300,23 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
   # Build array of months - options for select tag, then cache it. 
   def month_select_options(selected_value)
     unless @month_select_options
-      months = {
-        "January" => 1,
-        "February" => 2, 
-        "March" => 3, 
-        "April" => 4,
-        "May" => 5,
-        "June" => 6, 
-        "July" => 7, 
-        "August" => 8, 
-        "September" => 9,
-        "October" => 10, 
-        "November" => 11, 
-        "December" => 12,
-      }
-      @month_select_options = months.map do |key, value| 
-        "<option value='#{value}'>#{key}</option>"
+      # Use array instead of hash because order of months is imporant
+      months = [
+        [ "January", 1 ],
+        [ "February", 2 ], 
+        [ "March", 3 ], 
+        [ "April", 4 ],
+        [ "May", 5 ],
+        [ "June", 6 ], 
+        [ "July", 7 ], 
+        [ "August", 8 ], 
+        [ "September", 9 ],
+        [ "October", 10 ], 
+        [ "November", 11 ], 
+        [ "December", 12 ]
+      ]
+      @month_select_options = months.map do |values| 
+        "<option value='#{values[1]}'>#{values[0]}</option>"
       end.join("") 
     end
     set_selected_option(@month_select_options, selected_value)
