@@ -260,7 +260,14 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
         index += 1
         option
       end.join("") 
+      output += "</optgroup>\n<optgroup label=\"Other\">\n"
+      output += AppConfig['additional_signs'].map do |sign| 
+        option = "<option value='#{index}'>#{sign.capitalize}</option>"
+        index += 1
+        option
+      end.join("") 
       output += "</optgroup>\n"
+
       @signs_select_options = output
     end
     set_selected_option(@signs_select_options, selected_value)
