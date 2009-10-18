@@ -73,6 +73,13 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
     wrapping("select", field_name, label, element, method, options)
   end
 
+  def date_format_select(method, options = {}, html_options = {})
+    add_class_name(html_options, 'm-form_select')
+    field_name, label, options = field_settings(method, options)
+    element = select_tag("#{sanitized_object_name}[#{method.to_s}]", date_format_select_options(@object[method]), options)
+    wrapping("select", field_name, label, element, method, options)
+  end
+
   def date_select(method, options = {}, html_options = {})
     add_class_name(options, 'm-form_select')
     field_name, label, options = field_settings(method, options)
@@ -271,6 +278,18 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
       @signs_select_options = output
     end
     set_selected_option(@signs_select_options, selected_value)
+  end
+
+  # Build array of date formats - options for date format select tag, then cache it.
+  def date_format_select_options(selected_value)
+    unless @date_format_select_options
+      @date_format_select_options = []
+      AppConfig['date_formats'].each_with_index do |date_format, index|
+        @date_format_select_options << "<option value='#{index}'>#{date_format}</option>"
+      end
+      @date_format_select_options = @date_format_select_options.join("") 
+    end
+    set_selected_option(@date_format_select_options, selected_value)
   end
 
   # Build array of years - options for select tag, then cache it. 
