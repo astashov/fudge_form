@@ -163,7 +163,7 @@ class FudgeFormBuilder < ActionView::Helpers::FormBuilder
   end
 
   def gender_select(method, options = {}, html_options = {})
-    select(method, [['Male', 'm'], ['Female', 'f'], ['Other', 'o']], options, html_options)
+    select(method, [['Male', 0], ['Female', 1], ['Other', 2]], options, html_options)
   end
   
   def select(method, choices, options = {}, html_options = {})
